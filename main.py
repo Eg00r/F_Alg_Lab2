@@ -21,17 +21,17 @@ def create_conv_model():
     input_shape = (WORK_SIZE[0],WORK_SIZE[1],1) # Размерность входных данных. В данном случае изображения 200х200 пикселей 1 цвета (ЧБ).
     model = Sequential() # Создаём последовательную модель
    
-    model.add(Conv2D(16, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) # Добавляем входной слой
+    model.add(Conv2D(16, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
     model.add(MaxPooling2D(pool_size=(2,2)))
     
     model.add(Dropout(0.3))
 
-    model.add(Conv2D(32, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) # Добавляем входной слой
+    model.add(Conv2D(32, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
     model.add(MaxPooling2D(pool_size=(2,2)))
 
     model.add(Dropout(0.3))
 
-    model.add(Conv2D(64, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) # Добавляем входной слой
+    model.add(Conv2D(64, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
     model.add(MaxPooling2D(pool_size=(2,2)))
    
     model.add(Flatten()) # Превращаем многомерный массив (у нас тут он 5х5х64 в одномерный
