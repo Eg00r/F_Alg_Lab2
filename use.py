@@ -1,4 +1,3 @@
-""" Точка входа в приложение """
 import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2" # Убираем из консоли служебную информацию от TensorFlow
 import keras
@@ -7,19 +6,22 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 import cv2
 import numpy as np
+import sys
+
 
 WORK_SIZE = (200, 200) 
 
-# Основная функция программы
 if __name__ == '__main__':
-    model = load_model('testIT3.h5') # Загружаем сохранённую модель (если ранее создали, обучили и сохранили в файл)
-    # В файле уже обученная на полной выборке в 50 циклов нейронка. Можно дообучить ещё сильнее.
+    model = load_model('testIT3.h5') 
+    print("Введите путь к файлу")
+    tdir = input()
+    try:
+        img = cv2.imread(tdir)  # Открываем и переводим в градации серого
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    except:
+        print("Не удалось открыть файл")
+        sys.exit(0);
 
-    #Готовим файл для проверки
-    #tdir = "test_cat.jpg" # Указываем имя файла, который хотим распознать
-    tdir = "test_horse5.jpg" # Указываем имя файла, который хотим распознать
-    img = cv2.imread(tdir)  # Открываем и переводим в градации серого
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(img, WORK_SIZE) # Уменьшаем до размера нейронки
     # Приводим к виду, который просит нейронка
     img = np.array(img, dtype=np.float64)
