@@ -1,0 +1,9 @@
+Python 3.8.10
+python --version
+
+python -m venv venv
+venv\Scripts\activate
+
+python -m pip install --upgrade pip
+
+pip install keras~=2.4.3 pillow~=8.2.0 numpy~=1.19.5 tensorflow~=2.4.1 opencv-python~=4.5.1.48 matplotlib~=3.4.2 pandas~=1.2.4
