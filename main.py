@@ -8,13 +8,14 @@ from keras.layers import Conv2D, MaxPooling2D
 import cv2
 import numpy as np
 
-DS_TRAIN_BRAIN_DIR = '/Brain-MRI/dataset/Training'  # Папка тренировочного датасета хороших примеров
-DS_TRAIN_HORSE_DIR = '/horse_512/data/train'  # Папка тренировочного датасета плохих примеров
+DS_TRAIN_BRAIN_DIR = '/Brain-MRI/dataset/Training'  
+DS_TRAIN_HORSE_DIR = '/horse_512/data/train'  
 
-DS_TEST_BRAIN_DIR = '/Brain-MRI/dataset/Testing'  # Папка тестировочного датасета хороших примеров
-DS_TEST_HORSE_DIR = '/horse_512/data/validation'  # Папка тестировочного датасета плохих примеров
+DS_TEST_BRAIN_DIR = '/Brain-MRI/dataset/Testing'  
+DS_TEST_HORSE_DIR = '/horse_512/data/validation'  
+
 WORK_SIZE = (200, 200)  # Размер изображений для нейронки
-NUM_CLASSES = 2 # Количество классов распознаваемых объектов, зависит от Вашей задачи
+NUM_CLASSES = 2 # Количество классов распознаваемых объектов
 
 #Тут задаём саму модель нейронной сети
 def create_conv_model():
