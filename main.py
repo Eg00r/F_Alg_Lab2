@@ -8,11 +8,11 @@ from keras.layers import Conv2D, MaxPooling2D
 import cv2
 import numpy as np
 
-DS_TRAIN_GOOD_DIR = '/Brain-MRI/dataset/Training'  # Папка тренировочного датасета хороших примеров
-DS_TRAIN_BAD_DIR = '/horse_512/data/train'  # Папка тренировочного датасета плохих примеров
+DS_TRAIN_BRAIN_DIR = '/Brain-MRI/dataset/Training'  # Папка тренировочного датасета хороших примеров
+DS_TRAIN_HORSE_DIR = '/horse_512/data/train'  # Папка тренировочного датасета плохих примеров
 
-DS_TEST_GOOD_DIR = '/Brain-MRI/dataset/Testing'  # Папка тестировочного датасета хороших примеров
-DS_TEST_BAD_DIR = '/horse_512/data/validation'  # Папка тестировочного датасета плохих примеров
+DS_TEST_BRAIN_DIR = '/Brain-MRI/dataset/Testing'  # Папка тестировочного датасета хороших примеров
+DS_TEST_HORSE_DIR = '/horse_512/data/validation'  # Папка тестировочного датасета плохих примеров
 WORK_SIZE = (200, 200)  # Размер изображений для нейронки
 NUM_CLASSES = 2 # Количество классов распознаваемых объектов, зависит от Вашей задачи
 
@@ -55,11 +55,11 @@ def load_ds_train(ds_dir):
     """ Загружаем датасеты тренировочные x_train, y_train"""
     x_train = []
     y_train = []
-    # Загружаем хорошие
-    tmp_dir = str(ds_dir + DS_TRAIN_GOOD_DIR)
+    
+    tmp_dir = str(ds_dir + DS_TRAIN_BRAIN_DIR)
     x_train, y_train = load_ds_image(x_train, y_train, tmp_dir, 1)
-    # Загружаем плохие
-    tmp_dir = str(ds_dir + DS_TRAIN_BAD_DIR)
+    
+    tmp_dir = str(ds_dir + DS_TRAIN_HORSE_DIR)
     x_train, y_train = load_ds_image(x_train, y_train, tmp_dir, 0)
     return x_train, y_train
 
@@ -68,11 +68,11 @@ def load_ds_test(ds_dir):
     """ Загружаем датасеты тестовые x_test, y_test"""
     x_test = []
     y_test = []
-    # Загружаем хорошие
-    tmp_dir = str(ds_dir + DS_TEST_GOOD_DIR)
+    
+    tmp_dir = str(ds_dir + DS_TEST_BRAIN_DIR)
     x_test, y_test = load_ds_image(x_test, y_test, tmp_dir, 1)
-    # Загружаем плохие
-    tmp_dir = str(ds_dir + DS_TEST_BAD_DIR)
+    
+    tmp_dir = str(ds_dir + DS_TEST_HORSE_DIR)
     x_test, y_test = load_ds_image(x_test, y_test, tmp_dir, 0)
     return x_test, y_test
 
@@ -84,18 +84,18 @@ def load_ds_image(x, y, dir, goodflag):
     for i in filelist:
         tmp_img = load_img_from_file(str(tmp_dir+"/"+  i), WORK_SIZE)
         x.append(tmp_img)
-        y.append(int(goodflag))  # 0 - плохой пример, 1 - хороший (т.к. тут задача детекции или есть или нет объект)
+        y.append(int(goodflag))  
     return x, y
 
 
 def load_img_from_file(fname, imgsize=WORK_SIZE):
     img = cv2.imread(fname)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # Уменьшаем в зависимости от ориентации
+    
     img = cv2.resize(img, imgsize)
-    img = np.expand_dims(img, axis=2) # Приводим к виду, с которым работает наша модель
+    img = np.expand_dims(img, axis=2) 
     return img
-# Тут заканчиваются функции для подготовки картинок
+
 
 # Функция обучения полученной модели
 def learn_conv_model(model):
@@ -104,15 +104,19 @@ def learn_conv_model(model):
     # Приводим данные к нужному виду
     y_train = keras.utils.to_categorical(y_train, NUM_CLASSES)
     y_test = keras.utils.to_categorical(y_test, NUM_CLASSES)
+   
     # В нужные массивы
     x_train = np.array(x_train, dtype=np.float64)
     x_test = np.array(x_test, dtype=np.float64)
+    
     # Приводим к отрезку [0;1]
     x_train /= 255
     x_test /= 255
+    
     # batch_size - размер партии для обучения, 1 - вся. epochs - число циклов обучения (чем больше - тем лучше, 1-2тыс)
     model.fit(x_train, y_train, batch_size = 1, epochs=7, verbose=1, validation_data=(x_test, y_test))
     score = model.evaluate(x_test, y_test, verbose=0)
+    
     print('Потери на тесте:', score[0])
     print('Точность на тесте:', score[1])
     print("Baseline Error: %.2f%%" % (100 - score[1] * 100))
@@ -122,5 +126,5 @@ def learn_conv_model(model):
 
 if __name__ == '__main__':
 
-    model = create_conv_model() # Создаём саму модель
-    learn_conv_model(model) # Обучаем модель
+    model = create_conv_model() 
+    learn_conv_model(model) 
