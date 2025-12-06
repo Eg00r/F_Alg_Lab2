@@ -1,0 +1,7 @@
+TensorFlow: 2.4.4
+Keras: 2.4.3
+OpenCV: 4.5.1
+NumPy: 1.19.5
+Pandas: 1.2.5
+pillow 8.2.0
+numpy 1.19.5
