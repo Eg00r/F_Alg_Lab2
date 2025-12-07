@@ -17,33 +17,6 @@ DS_TEST_HORSE_DIR = '/horse_512/data/validation'
 WORK_SIZE = (200, 200)  # Размер изображений для нейронки
 NUM_CLASSES = 2 # Количество классов распознаваемых объектов
 
-def make_model():
-    input_shape = (WORK_SIZE[0],WORK_SIZE[1],1) # Размерность входных данных. В данном случае изображения 200х200 пикселей 1 цвета (ЧБ).
-    model = Sequential() # Создаём последовательную модель
-   
-    model.add(Conv2D(16, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
-    model.add(MaxPooling2D(pool_size=(2,2)))
-    
-    model.add(Dropout(0.3))
-
-    model.add(Conv2D(32, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
-    model.add(MaxPooling2D(pool_size=(2,2)))
-
-    model.add(Dropout(0.3))
-
-    model.add(Conv2D(64, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
-    model.add(MaxPooling2D(pool_size=(2,2)))
-   
-    model.add(Flatten()) # Превращаем многомерный массив (у нас тут он 5х5х64 в одномерный
-    model.add(Dense(64, activation='relu')) # Подсоединяем классический полносвязный слой из 64 нейронов
-    model.add(Dropout(0.5)) # Данный слой будет отключать каждую связь между слоями с вер-тью 50% для эфф. обучения
-    model.add(Dense(NUM_CLASSES, activation='softmax'))
-    
-    model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adadelta(),
-                  metrics=['accuracy']) # Компилируем модель
-    print(model.summary()) # Печатаем в консоль структуру нашей модели с размерами данных между слоями и числом параметров
-    return model
-
 def load_data(ds_dir):
     x_train = []
     y_train = []
@@ -80,7 +53,34 @@ def load_img(x, y, dir, flg):
         y.append(int(flg))  
     return x, y
 
-def learn_mdl(model):
+if __name__ == '__main__':
+    input_shape = (WORK_SIZE[0],WORK_SIZE[1],1) # Размерность входных данных. В данном случае изображения 200х200 пикселей 1 цвета (ЧБ).
+    model = Sequential() # Создаём последовательную модель
+   
+    model.add(Conv2D(16, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
+    model.add(MaxPooling2D(pool_size=(2,2)))
+    
+    model.add(Dropout(0.3))
+
+    model.add(Conv2D(32, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
+    model.add(MaxPooling2D(pool_size=(2,2)))
+
+    model.add(Dropout(0.3))
+
+    model.add(Conv2D(64, kernel_size=(16, 16), activation='relu', input_shape=input_shape)) 
+    model.add(MaxPooling2D(pool_size=(2,2)))
+   
+    model.add(Flatten()) # Превращаем многомерный массив (у нас тут он 5х5х64 в одномерный
+    model.add(Dense(64, activation='relu')) # Подсоединяем классический полносвязный слой из 64 нейронов
+    model.add(Dropout(0.5)) # Данный слой будет отключать каждую связь между слоями с вер-тью 50% для эфф. обучения
+    model.add(Dense(NUM_CLASSES, activation='softmax'))
+    
+    model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adadelta(),
+                  metrics=['accuracy']) # Компилируем модель
+    print(model.summary()) # Печатаем в консоль структуру нашей модели с размерами данных между слоями и числом параметров
+
+    
+    
     ds_dir = "dataset"
     x_train, y_train, x_test, y_test = load_data(ds_dir)
 
@@ -101,8 +101,3 @@ def learn_mdl(model):
     print("Baseline Error: %.2f%%" % (100 - score[1] * 100))
     model.save('testIT3.h5') # Сохраняем в файл
     print("Модель сохранена как testIT3.h5")
-
-
-if __name__ == '__main__':
-    model = make_model() 
-    learn_mdl(model) 
