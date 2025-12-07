@@ -17,7 +17,7 @@ DS_TEST_HORSE_DIR = '/horse_512/data/validation'
 WORK_SIZE = (200, 200)  # Размер изображений для нейронки
 NUM_CLASSES = 2 # Количество классов распознаваемых объектов
 
-def create_conv_model():
+def make_model():
     input_shape = (WORK_SIZE[0],WORK_SIZE[1],1) # Размерность входных данных. В данном случае изображения 200х200 пикселей 1 цвета (ЧБ).
     model = Sequential() # Создаём последовательную модель
    
@@ -44,28 +44,28 @@ def create_conv_model():
     print(model.summary()) # Печатаем в консоль структуру нашей модели с размерами данных между слоями и числом параметров
     return model
 
-def load_dataset(ds_dir):
+def load_data(ds_dir):
     x_train = []
     y_train = []
     
     tmp_dir = str(ds_dir + DS_TRAIN_BRAIN_DIR)
-    x_train, y_train = load_image(x_train, y_train, tmp_dir, 1)
+    x_train, y_train = load_img(x_train, y_train, tmp_dir, 1)
     
     tmp_dir = str(ds_dir + DS_TRAIN_HORSE_DIR)
-    x_train, y_train = load_image(x_train, y_train, tmp_dir, 0)
+    x_train, y_train = load_img(x_train, y_train, tmp_dir, 0)
 
     x_test = []
     y_test = []
     
     tmp_dir = str(ds_dir + DS_TEST_BRAIN_DIR)
-    x_test, y_test = load_image(x_test, y_test, tmp_dir, 1)
+    x_test, y_test = load_img(x_test, y_test, tmp_dir, 1)
     
     tmp_dir = str(ds_dir + DS_TEST_HORSE_DIR)
-    x_test, y_test = load_image(x_test, y_test, tmp_dir, 0)
+    x_test, y_test = load_img(x_test, y_test, tmp_dir, 0)
     return x_train, y_train, x_test, y_test
 
 
-def load_image(x, y, dir, goodflag):
+def load_img(x, y, dir, goodflag):
     tmp_dir = str(dir)
     filelist = os.listdir(tmp_dir)
     for i in filelist:     
@@ -80,9 +80,9 @@ def load_image(x, y, dir, goodflag):
         y.append(int(goodflag))  
     return x, y
 
-def learn_conv_model(model):
+def learn_mdl(model):
     ds_dir = "dataset"
-    x_train, y_train, x_test, y_test = load_dataset(ds_dir)
+    x_train, y_train, x_test, y_test = load_data(ds_dir)
 
     y_train = keras.utils.to_categorical(y_train, NUM_CLASSES)
     y_test = keras.utils.to_categorical(y_test, NUM_CLASSES)
@@ -104,5 +104,5 @@ def learn_conv_model(model):
 
 
 if __name__ == '__main__':
-    model = create_conv_model() 
-    learn_conv_model(model) 
+    model = make_model() 
+    learn_mdl(model) 
