@@ -65,7 +65,7 @@ def load_data(ds_dir):
     return x_train, y_train, x_test, y_test
 
 
-def load_img(x, y, dir, goodflag):
+def load_img(x, y, dir, flg):
     tmp_dir = str(dir)
     filelist = os.listdir(tmp_dir)
     for i in filelist:     
@@ -77,7 +77,7 @@ def load_img(x, y, dir, goodflag):
         img = np.expand_dims(img, axis=2) 
         
         x.append(img)
-        y.append(int(goodflag))  
+        y.append(int(flg))  
     return x, y
 
 def learn_mdl(model):
